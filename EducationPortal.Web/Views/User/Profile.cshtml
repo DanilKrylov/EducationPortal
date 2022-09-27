@@ -1,0 +1,150 @@
+﻿@model ProfileViewModel
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="~/css/nullStyle.css">
+    <link rel="stylesheet" href="~/css/сourseManage.css">
+    <link rel="stylesheet" href="~/css/profile.css">
+    <link rel="stylesheet" href="~/css/index.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <a class="logo" asp-action="Index" asp-controller="home">
+                    <img src="~/img/logo.jpg" />
+                </a>
+                <div class="search">
+                    <form>
+                        <div class="menu_item"><a asp-action="Index" asp-controller="Home">Main page</a></div>
+                        <div class="menu_item"><a asp-action="CreateCourse" asp-controller="CourseManage">Create course</a></div>
+                    </form>
+                </div>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main_container">
+                <div class="userinfo">
+                    <h1>Main info</h1>
+                    <div class="userinfo_item">
+                        <p class="field_name">Name: </p>
+                        <p class="field_value">@Model.UserName</p>
+                    </div>
+                    <div class="userinfo_item">
+                        <p class="field_name">Age: </p>
+                        <p class="field_value">@Model.Age </p>
+                    </div>
+                    <div class="userinfo_item">
+                        <p class="field_name">Email: </p>
+                        <p class="field_value">@Model.Email </p>
+                    </div>
+                </div>
+            </div>
+            @{
+                if(Model.SkillLevelDict.Count != 0){
+
+                    <div class="main_container">
+                        <div class="userinfo">
+                            <h1>Skills</h1>
+                            @{
+                                <div class="userinfo_item">
+                                    <p class="field_name">Skill Name</p>
+                                    <p class="field_value">Skill Level </p>
+                                </div>
+                                foreach(var skill in Model.SkillLevelDict){
+                                    <div class="userinfo_item">
+                                        <p class="field_name">@skill.Key</p>
+                                        <p class="field_value">@skill.Value </p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
+            @{
+                if(Model.StartedCourse.Count != 0){
+                    <div class="main_container">
+                        <div class="userinfo">
+
+                            <h1>Your Started Courses</h1>
+
+                            <div class="courses">
+                                @{
+                                    foreach (var courseState in Model.StartedCourse)
+                                    {
+                                        <a class="courses_item_container" asp-action="StartOrGetCourse" asp-controller="CoursePassage" asp-route-courseId="@courseState.Course.Id">
+                                            <div>
+                                                <div class="courses_item">
+                                                    <div class="for_img">
+                                                        <img src="https://wp-media.petersons.com/blog/wp-content/uploads/2018/01/26100309/blur-close-up-code-computer-546819.jpg" alt="">
+                                                    </div>
+                                                    <div class="courses_item_info">
+                                                        <div class="name">@courseState.Course.Name</div>
+                                                        <div class="description">@courseState.Course.Description</div>
+                                                        @{
+                                                            if(courseState.Completed){
+                                                                <div class="description">Course is completed</div>
+                                                            }else{
+                                                                <p class="description">You have successfuly comleted @courseState.MaterialStates.Count(c => c.Completed) out of @courseState.MaterialStates.Count() materials</p>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @{
+                if (Model.CreatedCourse.Count != 0)
+                {
+                    <div class="main_container">
+                        <div class="userinfo">
+
+                            <h1>Your Created Courses</h1>
+
+                            <div class="courses">
+                                @{
+                                    foreach (var course in Model.CreatedCourse)
+                                    {
+                                        <a class="courses_item_container" asp-action="ViewCreatedCourse" asp-controller="CourseManage" asp-route-courseId="@course.Id">
+
+                                            <div>
+                                                <div class="courses_item">
+                                                    <div class="for_img">
+                                                        <img src="https://wp-media.petersons.com/blog/wp-content/uploads/2018/01/26100309/blur-close-up-code-computer-546819.jpg" alt="">
+                                                    </div>
+                                                    <div class="courses_item_info">
+                                                        <div class="name">@course.Name</div>
+                                                        <div class="description">@course.Description</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <footer></footer>
+    </div>
+</body>
+</html>

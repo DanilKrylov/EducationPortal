@@ -1,0 +1,242 @@
+﻿@using EducationPortal.Domain.Models.Materials
+@model CourseViewModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Name</title>
+    <link rel="stylesheet" href="~/css/nullStyle.css">
+    <link rel="stylesheet" href="~/css/сourseManage.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <a class="logo" asp-action="Index" asp-controller="home">
+                    <img  src="~/img/logo.jpg" />
+                </a>
+                <div class="search">
+                    <form>
+                        @{
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="menu_item"><a asp-action="Logout" asp-controller="Authorize">Logout</a></div>
+                                <div class="menu_item"><a asp-action="Index" asp-controller="Home">Main page</a></div>
+                            }
+                            else
+                            {
+
+                                <div class="menu_item"><a asp-action="Login" asp-controller="Authorize">Login</a></div>
+                                <div class="menu_item"><a asp-action="Register" asp-controller="Authorize">Register</a></div>
+                            }
+                        }
+                    </form>
+                </div>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main_container">
+                <div class="main_info">
+                    <div class="text_container">
+                        <div class="field_info_container">
+                            <p class="field">Name:</p>
+                            <p class="info">@Model.Name</p>
+                        </div>
+                        <div class="field_info_container">
+                            <p class="field">Description:</p>
+                            <p class="info">@Model.Description</p>
+                        </div>
+                        <div class="field_info_container">
+                            <p class="field">Is published:</p>
+                            @{
+                                if (Model.Published)
+                                {
+                                    <p class="info">Yes</p>
+                                }
+                                else
+                                {
+                                    <p class="info">No</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="button_container">
+                        @{
+                            if(!Model.Published){
+                                <a class="button_link" asp-action="RemoveCourse" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Remove course</a>
+                                <a class="button_link" asp-action="AddSkill" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Add skill</a>
+                                <a class="button_link" asp-action="AddExistingMaterialView" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Add existing material</a>
+                                <a class="button_link" asp-action="AddLink" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Add link</a>
+                                <a class="button_link" asp-action="AddPdf" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Add pdf</a>
+                                <a class="button_link" asp-action="AddVideo" asp-controller="CourseManage" asp-route-courseId="@Model.Id">Add video</a>
+                            }
+                        }
+                        @{
+                            if (!Model.Published && Model.SkillList.Count != 0 && Model.Materials.Count != 0)
+                            {
+                                <a class="button_link" asp-action="Publish" asp-controller="CourseManage" asp-route-courseId=@Model.Id>Publish</a>
+                            }
+                        }
+                    </div>
+                    @{
+                        if(!Model.Published)
+                        {
+                            <p class="info">You can publish course if course have at least 1 material and 1 skill</p>
+                        }
+                    }
+                </div>
+                <div class="material_skill_container">
+
+                    @{
+                        if (Model.Materials.Where(c => c is Link).Count() != 0)
+                        {
+
+                            <div class="links">
+                                <h2>Links</h2>
+                                <div class="link_container">
+                                    @{
+                                        foreach (var material in Model.Materials)
+                                        {
+                                            if (material is Link)
+                                            {
+                                                var link = material as Link;
+
+                                                <div class="link_item">
+                                                    <a class="link_info" href="@link.Source">@link.Name</a>
+                                                    @{
+                                                        if (!Model.Published)
+                                                        {
+                                                            <a class="button_link" asp-action="RemoveMaterial" asp-controller="CourseManage" asp-route-materialId="@link.Id" asp-route-courseId="@Model.Id">Remove Link</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a></a>
+                                                        }
+                                                    }
+                                                    
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    @{
+
+                        if (Model.Materials.Where(c => c is Pdf).Count() != 0)
+                        {
+                            <div class="materials_type">
+                                <h2>Pdfs</h2>
+                                <div class="materials_type_container">
+                                    @{
+                                        foreach (var material in Model.Materials)
+                                        {
+                                            if (material is Pdf)
+                                            {
+                                                var pdf = material as Pdf;
+
+                                                <div class="materials_type_item">
+                                                    <div class="info_container">
+                                                        <p>Name: @pdf.Name</p>
+                                                        <p>Count of pages: @pdf.NumberOfPages</p>
+                                                    </div>
+                                                    <div class="button_container">
+                                                        @{
+                                                            <a class ="button_link" asp-action="ViewPdf" asp-controller="CourseManage" asp-route-pdfId="@pdf.Id">View pdf</a>
+                                                            if(!Model.Published){
+                                                                <a class="button_link" asp-action="RemoveMaterial" asp-controller="CourseManage" asp-route-materialId="@pdf.Id" asp-route-courseId="@Model.Id">Remove pdf</a>
+                                                            }else{
+                                                                <a></a>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    @{
+                        if (Model.Materials.Where(c => c is Video).Count() != 0)
+                        {
+                            <div class="materials_type">
+                                <h2>Videos</h2>
+                                <div class="materials_type_container">
+                                    @{
+                                        foreach (var material in Model.Materials)
+                                        {
+                                            if (material is Video)
+                                            {
+                                                var video = material as Video;
+
+                                                <div class="materials_type_item">
+                                                    <div class="info_container">
+                                                        <p>Author: @video.Name</p>
+                                                    </div>
+                                                    <div class="button_container">
+                                                        <a class="button_link" asp-action="ViewVideo" asp-controller="CourseManage" asp-route-videoId="@video.Id">View video</a>
+                                                        @if (!Model.Published)
+                                                        {
+                                                            <a class="button_link" asp-action="RemoveMaterial" asp-controller="CourseManage" asp-route-materialId="@video.Id" asp-route-courseId="@Model.Id">Remove video</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a></a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @{
+                        if (Model.SkillList.Count != 0)
+                        {
+
+                            <div class="materials_type">
+                                <h2>Skills</h2>
+                                <div class="materials_type_container">
+
+                                    @{
+                                        foreach (var skill in Model.SkillList)
+                                        {
+
+                                            <div class="materials_type_item">
+                                                <div class="info_container">
+                                                    <p>Name: @skill.Name</p>
+                                                </div>
+                                                <div class="button_container">
+                                                    @if (!Model.Published)
+                                                    {
+                                                        <a class="button_link" asp-action="RemoveSkill" asp-controller="CourseManage" asp-route-skillId="@skill.Id" asp-route-courseId="@Model.Id">Remove skill</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a></a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+    </div>
+</body>
+</html>

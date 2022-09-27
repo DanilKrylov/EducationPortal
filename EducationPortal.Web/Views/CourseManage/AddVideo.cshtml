@@ -1,0 +1,24 @@
+﻿@model AddVideoViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add video</title>
+    <link rel="stylesheet" href="~/css/form.css">
+    <link rel="stylesheet" href="~/css/addvideo.css">
+</head>
+<body>
+    <div id="wrapper">
+        <form id="register" method="post" autocomplete="off" asp-route-CourseId="@Model.CourseId" enctype="multipart/form-data">
+            <input type="text" required placeholder="video name" asp-for="Name" minlength="5" maxlength="15"/>
+            <div class="separator"></div>
+            <label class="for_video" for="video"><p>select video</p></label>
+            <input id="video" required type="file" style="display: none" accept=".mp4" placeholder="link" asp-for="Data" />
+            <button type="submit">&#xf0da;</button>
+        </form>
+    </div>
+</body>
+</html>

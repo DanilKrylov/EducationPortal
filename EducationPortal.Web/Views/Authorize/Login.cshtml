@@ -1,0 +1,24 @@
+﻿@model LoginViewModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="~/css/login.css">
+</head>
+<body>
+    <div id="wrapper">
+        <form id="signin" method="post" autocomplete="off">
+            <input class="input" required type="text" asp-for="Login" placeholder="login" />
+            <input class="input" required type="password" asp-for="Password" placeholder="password" />
+            <button type="submit">&#xf0da;</button>
+            <span asp-validation-for="Password"></span>
+            <p>don't have an account yet? <a asp-action="Register" asp-controller="Authorize">click here</a></p>
+        </form>
+    </div>
+</body>
+</html>

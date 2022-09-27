@@ -1,0 +1,22 @@
+.userinfo{
+    display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-top: 15px;
+	color:white;
+	border: 2px solid rgb(28, 30, 33);
+    background-color:rgb(39, 42, 46);
+    border-radius:10px;
+	padding: 10px;
+}
+
+
+.userinfo_item{
+    display: flex;
+    margin: 15px;
+    justify-content: space-between;
+}
+
+h1{
+    text-align: center;
+}

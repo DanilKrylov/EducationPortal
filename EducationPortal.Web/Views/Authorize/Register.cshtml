@@ -1,0 +1,45 @@
+﻿@model RegisterViewModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="~/css/form.css">
+</head>
+<body>
+    <div id="wrapper">
+        <form id="register" method="post" autocomplete="off">
+            <input type="text" required asp-for="Login" placeholder="username" />
+            <div class="separator"></div>
+
+            <input type="email" required asp-for="Email" placeholder="email" />
+            <div class="separator"></div>
+
+            <input type="tel" required asp-for="PhoneNumber" placeholder="phone" maxlength="12" minlength="9" />
+            <div class="separator"></div>
+
+            <input type="number" required asp-for="Age" placeholder="age" />
+            <div class="separator"></div>
+
+            <input type="password" required asp-for="Password" placeholder="password" />
+            <div class="separator"></div>
+
+            <input type="password" required asp-for="ConfirmPassword" placeholder="confirm password" />
+            <div class="separator"></div>
+
+            <button type="submit">&#xf0da;</button>
+            <span asp-validation-for="Login"></span>
+            <span asp-validation-for="Email"></span>
+            <span asp-validation-for="PhoneNumber"></span>
+            <span asp-validation-for="Age"></span>
+            <span asp-validation-for="Password"></span>
+            <span asp-validation-for="ConfirmPassword"></span>
+            <p>do you already have an account? <a asp-action="Login" asp-controller="Authorize">click here</a></p>
+        </form>
+    </div>
+</body>
+</html>

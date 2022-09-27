@@ -1,0 +1,211 @@
+﻿@using EducationPortal.Domain.Models.Materials
+@model CourseStateViewModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Course.Name</title>
+    <link rel="stylesheet" href="~/css/nullStyle.css">
+    <link rel="stylesheet" href="~/css/сourseManage.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <a class="logo" asp-action="Index" asp-controller="home">
+                    <img  src="~/img/logo.jpg" />
+                </a>
+                <div class="search">
+                    <form>
+                        @{
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="menu_item"><a asp-action="Logout" asp-controller="Authorize">Logout</a></div>
+                                <div class="menu_item"><a asp-action="Index" asp-controller="Home">Main page</a></div>
+                            }
+                            else
+                            {
+
+                                <div class="menu_item"><a asp-action="Login" asp-controller="Authorize">Login</a></div>
+                                <div class="menu_item"><a asp-action="Register" asp-controller="Authorize">Register</a></div>
+                            }
+                        }
+                    </form>
+                </div>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main_container">
+                <div class="main_info">
+                    <div class="text_container">
+                        <div class="field_info_container">
+                            <p class="field">Name:</p>
+                            <p class="info">@Model.Course.Name</p>
+                        </div>
+                        <div class="field_info_container">
+                            <p class="field">Description:</p>
+                            <p class="info">@Model.Course.Description</p>
+                        </div>
+                        <div class="field_info_container">
+                            <p class="field">Completed:</p>
+                            @{
+                                if(Model.Completed){
+                                    <p class="info">Yes</p>
+                                }else{
+                                    <p class="info">No</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <p class="info">You have successfuly comleted @Model.MaterialStates.Count(c => c.Completed) out of @Model.MaterialStates.Count() materials</p>
+                </div>
+                <div class="material_skill_container">
+
+                    @{
+
+                        if (Model.MaterialStates.Where(c => c.Material is Link).Count() != 0)
+                        {
+                            <div class="materials_type">
+                                <h2>Links</h2>
+                                <div class="materials_type_container">
+                                    @{
+                                        foreach (var materialState in Model.MaterialStates)
+                                        {
+                                            if (materialState.Material is Link link)
+                                            {
+                                                <div class="materials_type_item">
+                                                    <div class="info_container">
+                                                        <p><a href="@link.Source">@link.Name</a></p>
+                                                    </div>
+                                                    <div class="button_container">
+                                                        @{
+                                                            if (materialState.Completed)
+                                                            {
+                                                                <p>Material is Completed</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="button_link" asp-action="CompleteMaterial" asp-controller="CoursePassage" asp-route-materialStateId="@materialState.Id" asp-route-backCourseId="@Model.Course.Id">Complete material</a>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    @{
+
+                        if (Model.MaterialStates.Where(c => c.Material is Pdf).Count() != 0)
+                        {
+                            <div class="materials_type">
+                                <h2>Pdfs</h2>
+                                <div class="materials_type_container">
+                                    @{
+                                        foreach (var materialState in Model.MaterialStates)
+                                        {
+                                            if (materialState.Material is Pdf pdf)
+                                            {
+                                                <div class="materials_type_item">
+                                                    <div class="info_container">
+                                                        <p>Author: @pdf.Name</p>
+                                                        <p>Count of pages: @pdf.NumberOfPages</p>
+                                                    </div>
+                                                    <div class="button_container">
+                                                        @{
+                                                            if (materialState.Completed)
+                                                            {
+                                                                <p>Material is Completed</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="button_link" asp-action="CompleteMaterial" asp-controller="CoursePassage" asp-route-materialStateId="@materialState.Id" asp-route-backCourseId="@Model.Course.Id">Complete material</a>
+                                                            }
+                                                            <a class="button_link" asp-action="ViewPdf" asp-controller="CourseManage" asp-route-pdfId="@pdf.Id">View pdf</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    @{
+                        if (Model.MaterialStates.Where(c => c.Material is Video).Count() != 0)
+                        {
+                            <div class="materials_type">
+                                <h2>Videos</h2>
+                                <div class="materials_type_container">
+                                    @{
+                                        foreach (var materialState in Model.MaterialStates)
+                                        {
+                                            if (materialState.Material is Video video)
+                                            {
+                                                <div class="materials_type_item">
+                                                    <div class="info_container">
+                                                        <p>Author: @video.Name</p>
+                                                    </div>
+                                                    <div class="button_container">
+                                                        @{
+                                                            if (materialState.Completed)
+                                                            {
+                                                                <p>Material is Completed</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="button_link" asp-action="CompleteMaterial" asp-controller="CoursePassage" asp-route-materialStateId="@materialState.Id" asp-route-backCourseId="@Model.Course.Id">Complete material</a>
+                                                            }
+                                                        }
+
+                                                        <a class="button_link" asp-action="ViewVideo" asp-controller="CourseManage" asp-route-videoId="@video.Id">View video</a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @{
+                        if (Model.Course.SkillList.Count != 0)
+                        {
+
+                            <div class="materials_type">
+                                <h2>Skills</h2>
+                                <div class="materials_type_container">
+
+                                    @{
+                                        foreach (var skill in Model.Course.SkillList)
+                                        {
+
+                                            <div class="materials_type_item">
+                                                <div class="info_container">
+                                                    <p>Name: @skill.Name</p>
+                                                </div>
+                                                <div class="button_container">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+    </div>
+</body>
+</html>

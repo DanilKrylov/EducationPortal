@@ -1,0 +1,25 @@
+﻿@model AddLinkViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add link</title>
+    <link rel="stylesheet" href="~/css/form.css">
+    <link rel="stylesheet" href="~/css/addlink.css">
+</head>
+<body>
+    <div id="wrapper">
+        <form id="register" method="post" asp-route-CourseId="@Model.CourseId" autocomplete="off">
+            <input type="text" required placeholder="name" asp-for="Name" minlength="5" maxlength ="15"/>
+            <div class="separator"></div>
+
+            <input type="text" required placeholder="link" asp-for="Source" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]&#64;!\$&'\(\)\*\+,;=.]+$" title="you link must be lile http://127.0.0.1:5500/addlink.html?" />
+
+            <button type="submit">&#xf0da;</button>
+        </form>
+    </div>
+</body>
+</html>
